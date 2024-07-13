@@ -1,6 +1,6 @@
 # E-Commerce-API
 
 **Pre-requisites:**
-- pip install flask
+- pip install Flask
 - pip install Flask Flask-Limiter requests
-- pip install flask flask-limiter pillow captcha
+- pip install Flask Flask-limiter pillow captcha
