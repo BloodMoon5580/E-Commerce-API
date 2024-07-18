@@ -20,3 +20,8 @@ E-Commerce-API/
 - │   ├── index.html
 - ├── requirements.txt
 - └── README.md
+
+**Cloudflare Account Details:**
+Email: bloodmoon@gmail.com@gmail.com
+
+Password: Group9-4DW
