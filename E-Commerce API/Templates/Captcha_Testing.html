@@ -1,0 +1,33 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha Test</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        async function verifyCaptcha() {
+            const userInput = document.getElementById('captchaInput').value;
+            const recaptchaResponse = document.getElementById('g-recaptcha-response').value;
+
+            const response = await fetch('http://127.0.0.1:5000/api/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_input: userInput, recaptcha_response: recaptchaResponse })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+    </script>
+</head>
+<body>
+    <h1>Captcha Verification</h1>
+    <input type="text" id="captchaInput" placeholder="Enter something">
+    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <button onclick="verifyCaptcha()">Verify Captcha</button>
+</body>
+</html>

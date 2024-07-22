@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Submission</title>
+    <script>
+        async function submitReview() {
+            const reviewText = document.getElementById('reviewText').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/url_detection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ review_text: reviewText })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+
+                    if (result.status === 'accepted') {
+                        displayReview(reviewText);
+                    }
+                } else {
+                    alert('Error submitting review');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function displayReview(reviewText) {
+            const reviewList = document.getElementById('reviewList');
+            const newReview = document.createElement('div');
+            newReview.textContent = reviewText;
+            reviewList.appendChild(newReview);
+        }
+    </script>
+    <style>
+        #reviewList {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        #reviewList > div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Submit a Review</h1>
+    <textarea id="reviewText" rows="4" cols="50" placeholder="Enter your review here..."></textarea>
+    <br>
+    <button onclick="submitReview()">Submit Review</button>
+
+    <div id="reviewList">
+        <h2>Submitted Reviews:</h2>
+    </div>
+</body>
+</html>
