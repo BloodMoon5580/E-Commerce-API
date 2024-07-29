@@ -1,0 +1,4 @@
+url_pattern
+http://\S+
+https://\S+
+www.\S+
