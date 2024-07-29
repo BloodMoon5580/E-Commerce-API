@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Submission</title>
+    <style>
+        /* ... your styles ... */
+        #submitBtn {
+            cursor: pointer;
+        }
+        #loadingIndicator {
+            display: none;
+        }
+    </style>
     <script>
         async function submitReview() {
             const reviewText = document.getElementById('reviewText').value;
+
+            if (reviewText.trim() === '') {
+                alert('Please enter a review');
+                return;
+            }
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loadingIndicator').style.display = 'block';
 
             try {
                 const response = await fetch('http://127.0.0.1:5000/api/url_detection', {
@@ -25,10 +42,13 @@
                         displayReview(reviewText);
                     }
                 } else {
-                    alert('Error submitting review');
+                    alert('Error submitting review: ' + response.statusText);
                 }
             } catch (error) {
                 alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('loadingIndicator').style.display = 'none';
             }
         }
 
@@ -39,22 +59,13 @@
             reviewList.appendChild(newReview);
         }
     </script>
-    <style>
-        #reviewList {
-            margin-top: 20px;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-        }
-        #reviewList > div {
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
     <h1>Submit a Review</h1>
     <textarea id="reviewText" rows="4" cols="50" placeholder="Enter your review here..."></textarea>
     <br>
-    <button onclick="submitReview()">Submit Review</button>
+    <button id="submitBtn" onclick="submitReview()">Submit Review</button>
+    <div id="loadingIndicator">Loading...</div>
 
     <div id="reviewList">
         <h2>Submitted Reviews:</h2>
