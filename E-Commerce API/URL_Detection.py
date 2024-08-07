@@ -1,19 +1,29 @@
-# URL_Detection.py
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import csv
 import nltk
 nltk.download('punkt')  # Download required libraries
 
-app = Flask(_name_)
-CORS(app, resources={r"/api/*": {"origins": ""}})  # Enable CORS for all routes under /api/
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # Enable CORS for all routes under /api/*
 
-# Load blocked phrases from CSV file
+# Load blocked phrases from CSV file, handle potential encoding issues
 blocked_phrases = []
-with open('CSV-File-Goes-Here', 'r') as csvfile:
-    reader = csv.reader(csvfile)
-    for row in reader:
-        blocked_phrases.extend(row)  # Extend the list with each phrase in a row
+try:
+    with open('URL_Pattern.csv', 'r', encoding='utf-8') as csvfile:  # Specify encoding (optional)
+        reader = csv.reader(csvfile)
+        for row in reader:
+            blocked_phrases.extend(row)  # Extend the list with each phrase in a row
+except FileNotFoundError:
+    print("Error: CSV file not found.")
+except UnicodeDecodeError:
+    print("Error: Potential encoding issue with CSV file. Try specifying encoding.")
+
+# Check if any blocked phrases were loaded
+if not blocked_phrases:
+    print("Warning: No blocked phrases found in CSV.")
+
+
 
 # Function to check if review text contains a blocked phrase
 def contains_blocked_phrase(text):
@@ -28,19 +38,14 @@ def url_detection():
     review_text = data.get('review_text')
 
     if contains_blocked_phrase(review_text):
-        return jsonify({'status': 'blocked', 'message': 'Review contains a blocked phrase.'})
-    elif contains_url(review_text):  # Check for URLs even if no blocked phrases
-        return jsonify({'status': 'blocked', 'message': 'Review contains a URL and is blocked.'})
+        return jsonify({'status': 'blocked', 'message': 'Review contains a URL. Please remove the URL'})
     else:
         return jsonify({'status': 'accepted', 'message': 'Review is accepted.'})
+    
+    # ... (existing code for reading CSV)
+    if not blocked_phrases:
+        print("Warning: No blocked phrases found in CSV.")
 
-# URL detection (unchanged)
-def contains_url(text):
-    url_pattern = re.compile(r"https?://\S+|www\.\S+")
-    if url_pattern.search(text):
-        return True
-    return False
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
-
