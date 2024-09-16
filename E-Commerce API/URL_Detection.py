@@ -2,33 +2,45 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import csv
 import nltk
-nltk.download('punkt')  # Download required libraries
+nltk.download('punkt'); # Download required libraries
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # Enable CORS for all routes under /api/*
+CORS(app, resources={r"/api/*": {"origins": "*"}}); # Enable CORS for all routes under /api/*
 
-# Load blocked phrases from CSV file, handle potential encoding issues
+# List of CSV files to load blocked phrases from
+csv_files = [
+    'Banned Links CSV/BannedLinks_abuse.csv',
+    'Banned Links CSV/BannedLinks_adobe.csv',
+    'Banned Links CSV/BannedLinks_Ads.csv',
+    'Banned Links CSV/BannedLinks_basic.csv',
+    'Banned Links CSV/BannedLinks_crypto.csv',
+    'Banned Links CSV/BannedLinks_drugs.csv',
+    'Banned Links CSV/BannedLinks_everything.csv',
+    'Banned Links CSV/BannedLinks_Facebook.csv',
+    'Banned Links CSV/BannedLinks_Fraud.csv'
+]
+
+# Load blocked phrases from multiple CSV files
 blocked_phrases = []
-try:
-    with open('URL_Pattern.csv', 'r', encoding='utf-8') as csvfile:  # Specify encoding (optional)
-        reader = csv.reader(csvfile)
-        for row in reader:
-            blocked_phrases.extend(row)  # Extend the list with each phrase in a row
-except FileNotFoundError:
-    print("Error: CSV file not found.")
-except UnicodeDecodeError:
-    print("Error: Potential encoding issue with CSV file. Try specifying encoding.")
+for file_path in csv_files:
+    try:
+        with open(file_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                blocked_phrases.extend(row); # Extend the list with each phrase in a row
+    except FileNotFoundError:
+        print(f"Error: CSV file {file_path} not found.")
+    except UnicodeDecodeError:
+        print(f"Error: Potential encoding issue with CSV file {file_path}. Try specifying encoding.")
 
 # Check if any blocked phrases were loaded
 if not blocked_phrases:
     print("Warning: No blocked phrases found in CSV.")
 
-
-
 # Function to check if review text contains a blocked phrase
 def contains_blocked_phrase(text):
     for phrase in blocked_phrases:
-        if phrase.lower() in text.lower():  # Case-insensitive check
+        if phrase.lower() in text.lower(): # Case-insensitive check
             return True
     return False
 
@@ -41,11 +53,6 @@ def url_detection():
         return jsonify({'status': 'blocked', 'message': 'Review contains a URL. Please remove the URL'})
     else:
         return jsonify({'status': 'accepted', 'message': 'Review is accepted.'})
-    
-    # ... (existing code for reading CSV)
-    if not blocked_phrases:
-        print("Warning: No blocked phrases found in CSV.")
-
 
 if __name__ == '__main__':
     app.run(debug=True)
