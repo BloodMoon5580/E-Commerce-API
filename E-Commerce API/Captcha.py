@@ -6,15 +6,20 @@ import requests
 app = Flask(__name__)
 CORS(app)  # This will enable CORS for all routes
 
-CLOUDFLARE_SECRET_KEY = 'YET9pgYpC6i8uSTDMoR-duEqOD8mx6hL8g39RRS0J'
+CLOUDFLARE_SECRET_KEY = 'YOUR_CLOUDFLARE_SECRET_KEY'
 
-def verify_cloudflare_captcha(response):
+def verify_cloudflare_captcha(captcha_response):
     payload = {
         'secret': CLOUDFLARE_SECRET_KEY,
-        'response': response
+        'response': captcha_response
     }
-    r = requests.post('https://api.cloudflare.com/client/v4/captcha/verify', json=payload)
-    return r.json().get('success')
+    try:
+        r = requests.post('https://api.cloudflare.com/client/v4/captcha/verify', json=payload)
+        r.raise_for_status()  # Raise an error for bad responses
+        return r.json().get('success', False)
+    except requests.exceptions.RequestException as e:
+        print(f"Error verifying CAPTCHA: {e}")
+        return False
 
 @app.route('/api/captcha', methods=['POST'])
 def verify_captcha():
@@ -23,7 +28,7 @@ def verify_captcha():
     captcha_response = data.get('captcha_response')
     
     if verify_cloudflare_captcha(captcha_response):
-        # Here, you can add additional verification for user_input if necessary
+        # Additional user input verification can be done here if needed
         return jsonify({'status': 'success', 'message': 'Captcha verified successfully!'})
     else:
         return jsonify({'status': 'failure', 'message': 'Captcha verification failed.'})

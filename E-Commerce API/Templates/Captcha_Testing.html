@@ -1,33 +1,43 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Captcha Test</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cloudflare-captcha/1.0.0/cloudflare-captcha.min.js" async defer></script>
     <script>
         async function verifyCaptcha() {
             const userInput = document.getElementById('captchaInput').value;
-            const recaptchaResponse = document.getElementById('g-recaptcha-response').value;
+            const captchaResponse = document.getElementById('cloudflare-captcha-response').value;
 
             const response = await fetch('http://127.0.0.1:5000/api/captcha', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ user_input: userInput, recaptcha_response: recaptchaResponse })
+                body: JSON.stringify({ user_input: userInput, captcha_response: captchaResponse })
             });
 
             const result = await response.json();
             alert(result.message);
         }
+
+        // Initialize Cloudflare CAPTCHA
+        window.onload = function() {
+            CloudflareCaptcha.init({
+                sitekey: 'YOUR_CLOUDFLARE_SITE_KEY',
+                onSuccess: function(response) {
+                    document.getElementById('cloudflare-captcha-response').value = response;
+                }
+            });
+        };
     </script>
 </head>
 <body>
     <h1>Captcha Verification</h1>
     <input type="text" id="captchaInput" placeholder="Enter something">
-    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <input type="hidden" id="cloudflare-captcha-response"> <!-- Hidden input for the CAPTCHA response -->
+    <div id="cloudflare-captcha" data-sitekey="YOUR_CLOUDFLARE_SITE_KEY"></div>
     <button onclick="verifyCaptcha()">Verify Captcha</button>
 </body>
 </html>
