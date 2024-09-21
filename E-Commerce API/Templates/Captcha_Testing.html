@@ -3,41 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captcha Test</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cloudflare-captcha/1.0.0/cloudflare-captcha.min.js" async defer></script>
-    <script>
-        async function verifyCaptcha() {
-            const userInput = document.getElementById('captchaInput').value;
-            const captchaResponse = document.getElementById('cloudflare-captcha-response').value;
+    <title>CAPTCHA TEST</title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+    <h1> CAPTCHA TESTING </h1>
+    <p> Input Captcha here <p>
+    <form id="captcha-form">
+        <input type="text" name="user_input" placeholder="Your Input" required>
+        <br>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAAkaNHTK0qKoOHzI"><br></div>
+    </br>
+        <button type="submit">Submit</button>
+    </form>
 
-            const response = await fetch('http://127.0.0.1:5000/api/captcha', {
+    <script>
+        document.getElementById('captcha-form').onsubmit = async function(event) {
+            event.preventDefault();  // Prevent form submission
+
+            const userInput = event.target.user_input.value;
+            const captchaResponse = document.querySelector('.cf-turnstile').dataset.response;
+
+            // Send the user input and CAPTCHA response to your Flask API
+            const response = await fetch('/api/captcha', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ user_input: userInput, captcha_response: captchaResponse })
+                body: JSON.stringify({
+                    user_input: userInput,
+                    captcha_response: captchaResponse
+                })
             });
 
             const result = await response.json();
-            alert(result.message);
-        }
-
-        // Initialize Cloudflare CAPTCHA
-        window.onload = function() {
-            CloudflareCaptcha.init({
-                sitekey: 'ET9pgYpC6i8uSTDMoR-duEqOD8mx6hL8g39RRS0J',
-                onSuccess: function(response) {
-                    document.getElementById('cloudflare-captcha-response').value = response;
-                }
-            });
+            alert(result.message);  // Display the result message
         };
     </script>
-</head>
-<body>
-    <h1>Captcha Verification</h1>
-    <input type="text" id="captchaInput" placeholder="Enter something">
-    <input type="hidden" id="cloudflare-captcha-response"> <!-- Hidden input for the CAPTCHA response -->
-    <div id="cloudflare-captcha" data-sitekey="YOUR_CLOUDFLARE_SITE_KEY"></div>
-    <button onclick="verifyCaptcha()">Verify Captcha</button>
 </body>
 </html>
