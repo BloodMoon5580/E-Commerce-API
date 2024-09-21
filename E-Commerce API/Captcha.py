@@ -6,7 +6,7 @@ import requests
 app = Flask(__name__)
 CORS(app)  # This will enable CORS for all routes
 
-CLOUDFLARE_SECRET_KEY = 'YOUR_CLOUDFLARE_SECRET_KEY'
+CLOUDFLARE_SECRET_KEY = 'ET9pgYpC6i8uSTDMoR-duEqOD8mx6hL8g39RRS0J'
 
 def verify_cloudflare_captcha(captcha_response):
     payload = {
