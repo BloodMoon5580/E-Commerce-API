@@ -20,10 +20,10 @@ def text_process(text):
 
 # Load the saved model and vectorizer
 try:
-    with open('E-Commerce API/Comment Reviewer/model2.pkl', 'rb') as model_file:
+    with open('E-Commerce API/Comment Reviewer/model.pkl', 'rb') as model_file:
         loaded_model = pickle.load(model_file)
 
-    with open('E-Commerce API/Comment Reviewer/vectorizer2.pkl', 'rb') as vectorizer_file:
+    with open('E-Commerce API/Comment Reviewer/vectorizer.pkl', 'rb') as vectorizer_file:
         tfidf_vectorizer = pickle.load(vectorizer_file)
 
 except Exception as e:
@@ -80,3 +80,5 @@ def review_analysis():
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
+    
+    
