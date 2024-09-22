@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        .alert h4 {
+            margin: 0;
+        }
+        .chart-container {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Notifications</h2>
+
+        <!-- Alert notifications for CAPTCHA failures -->
+        <div id="captchaAlert" class="alert alert-danger" style="display:none;">
+            <h4>⚠️ Failed CAPTCHA Attempts</h4>
+            <p id="captchaMessage">User <span id="captchaUser"></span> failed 3 login attempts with CAPTCHA at <span id="captchaIp"></span>.</p>
+        </div>
+
+        <!-- Alert notifications for defamatory reviews -->
+        <div id="reviewAlert" class="alert alert-danger" style="display:none;">
+            <h4>⚠️ Defamatory Review Submitted</h4>
+            <p id="reviewMessage">User <span id="reviewUser"></span> posted a defamatory review for product <span id="reviewProduct"></span>.</p>
+        </div>
+
+        <!-- Bar chart container -->
+        <div class="chart-container">
+            <canvas id="adminChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let captchaFailures = 0;
+        let defamatoryReviews = 0;
+
+        // Function to update the chart
+        function updateChart() {
+            adminChart.data.datasets[0].data = [captchaFailures, defamatoryReviews];
+            adminChart.update();
+        }
+
+        // Function to fetch notifications for failed login attempts
+        function fetchLoginFailures() {
+            fetch('/api/notifications/loginFailures', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: 'john_doe',  // Replace with actual data
+                    failedAttempts: 3,     // Replace with actual failed attempts
+                    ipAddress: '192.168.0.1' // Replace with actual IP
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Admin notified of login failures.") {
+                    // Display the alert
+                    document.getElementById('captchaUser').innerText = 'john_doe';  // Example username
+                    document.getElementById('captchaIp').innerText = '192.168.0.1'; // Example IP address
+                    document.getElementById('captchaAlert').style.display = 'block';
+                    
+                    // Increment and update the chart
+                    captchaFailures++;
+                    updateChart();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Function to fetch notifications for defamatory reviews
+        function fetchDefamatoryReviews() {
+            fetch('/api/notifications/defamatoryReview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: 'user_123',         // Replace with actual user ID
+                    productId: 'product_456',   // Replace with actual product ID
+                    reviewText: 'scam product'  // Replace with actual review text
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Admin notified of defamatory review.") {
+                    // Display the alert
+                    document.getElementById('reviewUser').innerText = 'user_123';  // Example user ID
+                    document.getElementById('reviewProduct').innerText = 'product_456'; // Example product ID
+                    document.getElementById('reviewAlert').style.display = 'block';
+                    
+                    // Increment and update the chart
+                    defamatoryReviews++;
+                    updateChart();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Simulate fetching notifications (replace with actual triggers)
+        setTimeout(fetchLoginFailures, 1000); // Simulate fetching login failures after 1 second
+        setTimeout(fetchDefamatoryReviews, 3000); // Simulate fetching defamatory reviews after 3 seconds
+
+        // Bar chart configuration
+        const ctx = document.getElementById('adminChart').getContext('2d');
+        const adminChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Failed CAPTCHA Attempts', 'Defamatory Reviews'],
+                datasets: [{
+                    label: 'Number of Incidents',
+                    data: [captchaFailures, defamatoryReviews],
+                    backgroundColor: ['#f8d7da', '#f5c6cb'],
+                    borderColor: ['#721c24', '#721c24'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
