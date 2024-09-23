@@ -21,10 +21,10 @@ def text_process(text):
 
 # Load the saved model and vectorizer
 try:
-    with open('E-Commerce API/Comment Reviewer/model.pkl', 'rb') as model_file:
+    with open('E-Commerce API/Comment Reviewer/svm_model.pkl', 'rb') as model_file:
         loaded_model = pickle.load(model_file)
 
-    with open('E-Commerce API/Comment Reviewer/vectorizer.pkl', 'rb') as vectorizer_file:
+    with open('E-Commerce API/Comment Reviewer/svm_vectorizer.pkl', 'rb') as vectorizer_file:
         tfidf_vectorizer = pickle.load(vectorizer_file)
 
 except Exception as e:
@@ -46,8 +46,11 @@ def classify_review(text):
         # Use the loaded vectorizer to transform the preprocessed text
         transformed_comment = tfidf_vectorizer.transform([preprocessed_comment])
 
+        # Convert sparse matrix to dense array (needed for SVC)
+        transformed_comment_dense = transformed_comment.toarray()
+
         # Use the loaded model to predict if the review is fake or not
-        prediction = loaded_model.predict(transformed_comment)[0]
+        prediction = loaded_model.predict(transformed_comment_dense)[0]
 
         return prediction
     except Exception as e:
@@ -73,7 +76,6 @@ def review_analysis():
 
         # Return the result based on the classification
         if review_class == 0:  # Assuming '0' means fake review
-            fake_reviews.append({'text': review_text})  # Store the fake review
             return jsonify({'status': 'rejected', 'message': 'Review classified as fake.'})
         else:  # Assuming '1' means not fake
             return jsonify({'status': 'accepted', 'message': 'Review not classified as fake.'})
