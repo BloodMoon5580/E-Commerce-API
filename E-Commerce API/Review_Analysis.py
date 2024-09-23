@@ -3,6 +3,7 @@ from flask_cors import CORS
 import pickle
 import re
 import nltk
+
 nltk.download('punkt')  # Download the NLTK data for tokenization
 
 # Define the text_process function for preprocessing
@@ -32,6 +33,9 @@ except Exception as e:
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+# List to store fake reviews
+fake_reviews = []
 
 # Function to classify reviews using the loaded model
 def classify_review(text):
@@ -68,7 +72,8 @@ def review_analysis():
             return jsonify({'status': 'error', 'message': 'Classification error.'}), 500
 
         # Return the result based on the classification
-        if review_class == 0:  # Assuming '0' means fake review (trained solely on fake reviews)
+        if review_class == 0:  # Assuming '0' means fake review
+            fake_reviews.append({'text': review_text})  # Store the fake review
             return jsonify({'status': 'rejected', 'message': 'Review classified as fake.'})
         else:  # Assuming '1' means not fake
             return jsonify({'status': 'accepted', 'message': 'Review not classified as fake.'})
@@ -77,8 +82,11 @@ def review_analysis():
         print(f"Error in /api/review_analysis: {e}")
         return jsonify({'status': 'error', 'message': 'Internal server error.'}), 500
 
+# API route to get fake reviews
+@app.route('/api/fake_reviews', methods=['GET'])
+def get_fake_reviews():
+    return jsonify({'reviews': fake_reviews})
+
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
-    
-    
