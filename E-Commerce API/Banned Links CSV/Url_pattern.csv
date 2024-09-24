@@ -1,0 +1,332 @@
+http
+https
+http:/
+https:/
+http://
+https://
+ftp
+ftp:/
+ftp://
+sftp
+sftp:/
+sftp://
+ftps
+ftps:/
+ftps://
+smtp
+smtp:/
+smtp://
+imap
+imap:/
+imap://
+pop3
+pop3:/
+pop3://
+telnet
+telnet:/
+telnet://
+ssh
+ssh:/
+ssh://
+ldap
+ldap:/
+ldap://
+ldaps
+ldaps:/
+ldaps://
+dns
+dns:/
+dns://
+ws
+ws:/
+ws://
+wss
+wss:/
+wss://
+tftp
+tftp:/
+tftp://
+rtsp
+rtsp:/
+rtsp://
+rtp
+rtp:/
+rtp://
+smb
+smb:/
+smb://
+nfs
+nfs:/
+nfs://
+mailto:
+mailto
+data:
+urn:
+urn:isbn:
+git
+git:/
+git://
+bittorrent
+bittorrent:/
+bittorrent://
+irc
+irc:/
+irc://
+whois:
+whois:/
+whois://
+z39.50
+z39.50://
+z39.50://
+nntp
+nntp:/
+nntp://
+news:
+magnet:
+www
+www.
+www(dot)
+www (dot)
+www[dot]
+www [dot]
+www{dot}
+www {dot}
+.com
+(dot)com
+(dot) com
+[dot]com
+[dot] com
+{dot}com
+{dot} com
+.org
+(dot)org
+(dot) org
+[dot]org
+[dot] org
+{dot}org
+{dot} org
+.net
+(dot)net
+(dot) net
+[dot]net
+[dot] net
+{dot}net
+{dot} net
+.info
+(dot)info
+(dot) info
+[dot]info
+[dot] info
+{dot}info
+{dot} info
+.biz
+(dot)biz
+(dot) biz
+[dot]biz
+[dot] biz
+{dot}biz
+{dot} biz
+.edu
+(dot)edu
+(dot) edu
+[dot]edu
+[dot] edu
+{dot}edu
+{dot} edu
+.gov
+(dot)gov
+(dot) gov
+[dot]gov
+[dot] gov
+{dot}gov
+{dot} gov
+.mil
+(dot)mil
+(dot) mil
+[dot]mil
+[dot] mil
+{dot}mil
+{dot} mil
+.co
+(dot)co
+(dot) co
+[dot]co
+[dot] co
+{dot}co
+{dot} co
+.us
+(dot)us
+(dot) us
+[dot]us
+[dot] us
+{dot}us
+{dot} us
+.uk
+(dot)uk
+(dot) uk
+[dot]uk
+[dot] uk
+{dot}uk
+{dot} uk
+.de
+(dot)de
+(dot) de
+[dot]de
+[dot] de
+{dot}de
+{dot} de
+.fr
+(dot)fr
+(dot) fr
+[dot]fr
+[dot] fr
+{dot}fr
+{dot} fr
+.jp
+(dot)jp
+(dot) jp
+[dot]jp
+[dot] jp
+{dot}jp
+{dot} jp
+.ca
+(dot)ca
+(dot) ca
+[dot]ca
+[dot] ca
+{dot}ca
+{dot} ca
+.au
+(dot)au
+(dot) au
+[dot]au
+[dot] au
+{dot}au
+{dot} au
+.cn
+(dot)cn
+(dot) cn
+[dot]cn
+[dot] cn
+{dot}cn
+{dot} cn
+.in
+(dot)in
+(dot) in
+[dot]in
+[dot] in
+{dot}in
+{dot} in
+.io
+(dot)io
+(dot) io
+[dot]io
+[dot] io
+{dot}io
+{dot} io
+.tv
+(dot)tv
+(dot) tv
+[dot]tv
+[dot] tv
+{dot}tv
+{dot} tv
+.app
+(dot)app
+(dot) app
+[dot]app
+[dot] app
+{dot}app
+{dot} app
+.blog
+(dot)blog
+(dot) blog
+[dot]blog
+[dot] blog
+{dot}blog
+{dot} blog
+.shop
+(dot)shop
+(dot) shop
+[dot]shop
+[dot] shop
+{dot}shop
+{dot} shop
+.tech
+(dot)tech
+(dot) tech
+[dot]tech
+[dot] tech
+{dot}tech
+{dot} tech
+.xyz
+(dot)xyz
+(dot) xyz
+[dot]xyz
+[dot] xyz
+{dot}xyz
+{dot} xyz
+.online
+(dot)online
+(dot) online
+[dot]online
+[dot] online
+{dot}online
+{dot} online
+.guru
+(dot)guru
+(dot) guru
+[dot]guru
+[dot] guru
+{dot}guru
+{dot} guru
+.store
+(dot)store
+(dot) store
+[dot]store
+[dot] store
+{dot}store
+{dot} store
+.arpa
+(dot)arpa
+(dot) arpa
+[dot]arpa
+[dot] arpa
+{dot}arpa
+{dot} arpa
+.中国
+(dot)中国
+(dot) 中国
+[dot]中国
+[dot] 中国
+{dot}中国
+{dot} 中国
+ .شبكة
+.شبكة
+(dot)شبكة
+(dot) شبكة
+[dot]شبكة
+[dot] شبكة
+{dot}شبكة
+{dot} شبكة
+.рф
+(dot)рф
+(dot) рф
+[dot]рф
+[dot] рф
+{dot}рф
+{dot} рф
+.भारत
+(dot)भारत
+(dot) भारत
+[dot]भारत
+[dot] भारत
+{dot}भारत
+{dot} भारत
+.ভারত
+(dot)ভারত
+(dot) ভারত
+[dot]ভারত
+[dot] ভারত
+{dot}ভারত
+{dot} ভারত
