@@ -7,7 +7,26 @@ csv_files = [
     'Banned Links CSV/BannedLinks_abuse.csv',
     'Banned Links CSV/BannedLinks_adobe.csv',
     'Banned Links CSV/BannedLinks_Ads.csv',
-    # Add other CSV files here...
+    'Banned Links CSV/BannedLinks_basic.csv',
+    'Banned Links CSV/BannedLinks_crypto.csv',
+    'Banned Links CSV/BannedLinks_drugs.csv',
+    'Banned Links CSV/BannedLinks_everything.csv',
+    'Banned Links CSV/BannedLinks_Facebook.csv',
+    'Banned Links CSV/BannedLinks_Fraud.csv',
+    'Banned Links CSV/BannedLinks_Gambling.csv',
+    'Banned Links CSV/BannedLinks_Malware.csv',
+    'Banned Links CSV/BannedLinks_Phishing.csv',
+    'Banned Links CSV/BannedLinks_Piracy.csv',
+    'Banned Links CSV/BannedLinks_Porn.csv',
+    'Banned Links CSV/BannedLinks_Ransomware.csv',
+    'Banned Links CSV/BannedLinks_Redirect.csv',
+    'Banned Links CSV/BannedLinks_Scam.csv',
+    'Banned Links CSV/BannedLinks_Smart-TV.csv',
+    'Banned Links CSV/BannedLinks_TikTok.csv',
+    'Banned Links CSV/BannedLinks_Torrent.csv',
+    'Banned Links CSV/BannedLinks_Tracking.csv',
+    'Banned Links CSV/BannedLinks_Twitter.csv',
+    'Banned Links CSV/BannedLinks_Youtube.csv',
 ]
 
 # Load blocked phrases from multiple CSV files
