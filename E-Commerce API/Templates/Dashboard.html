@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="chart-container">
+        <h2>Daily Fake Reviews Chart</h2>
+        <canvas id="fakeReviewsChart"></canvas>
+    </div>
+
+    <script>
+        const chartData = {{ chart_data | tojson }};  // Access data from template
+
+        console.log(chartData); // Add this line to debug
+
+        // Create a Chart.js bar chart
+        const ctx = document.getElementById('fakeReviewsChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.dates,
+                datasets: [{
+                    label: 'Fake Reviews',
+                    data: chartData.counts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                // Customize chart options as needed
+            }
+        });
+    </script>
+</body>
+</html>
