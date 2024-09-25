@@ -5,14 +5,12 @@
 </head>
 <body>
     <div class="chart-container">
-        <h2>Daily Fake Reviews Chart</h2>
+        <h2>Daily Fake Reviews</h2>
         <canvas id="fakeReviewsChart"></canvas>
     </div>
 
     <script>
-        const chartData = {{ chart_data | tojson }};  // Access data from template
-
-        console.log(chartData); // Add this line to debug
+        const chartData = {{ chart_data | tojson | safe }};  // Access data from Flask
 
         // Create a Chart.js bar chart
         const ctx = document.getElementById('fakeReviewsChart').getContext('2d');
@@ -30,6 +28,11 @@
             },
             options: {
                 // Customize chart options as needed
+                scales: {
+                    y: {
+                        beginAtZero: true  # Ensure Y-axis starts at 0
+                    }
+                }
             }
         });
     </script>

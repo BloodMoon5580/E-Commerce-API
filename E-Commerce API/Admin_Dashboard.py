@@ -1,37 +1,38 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
+import csv
+from collections import defaultdict
 
 app = Flask(__name__)
 
-# API endpoint for failed CAPTCHA login attempts
-@app.route('/api/notifications/loginFailures', methods=['POST'])
-def login_failures():
-    data = request.get_json()
-    
-    username = data.get('username')
-    failed_attempts = data.get('failedAttempts')
-    ip_address = data.get('ipAddress')
+# Data storage (temporary, consider database integration)
+FAKE_REVIEW_LOG = 'E-Commerce API/fake_reviews_log.csv'
+fake_review_counts = defaultdict(int)  # Dictionary to store daily fake review counts
 
-    if username and failed_attempts >= 3 and ip_address:
-        # Notify admin logic can go here
-        return jsonify({"message": "Admin notified of login failures."}), 200
-    else:
-        return jsonify({"error": "Invalid data provided."}), 400
- 
-# API endpoint for defamatory reviews
-@app.route('/api/notifications/defamatoryReview', methods=['POST'])
-def defamatory_review():
-    data = request.get_json()
+# Helper function to update fake review counts from CSV
+def update_fake_review_counts():
+    global fake_review_counts
+    fake_review_counts.clear()  # Clear existing data
 
-    user_id = data.get('userId')
-    product_id = data.get('productId')
-    review_text = data.get('reviewText')
+    try:
+        with open(FAKE_REVIEW_LOG, mode='r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                date = row[1][:10]  # Extract the date part (YYYY-MM-DD)
+                fake_review_counts[date] += 1
+    except FileNotFoundError:
+        pass  # Ignore if the log file doesn't exist
 
-    if user_id and product_id and "defamatory" in review_text.lower():
-        # Notify admin logic can go here
-        return jsonify({"message": "Admin notified of defamatory review."}), 200
-    else:
-        return jsonify({"error": "Invalid data provided."}), 400
+# Route to render the dashboard with chart data
+@app.route('/dashboard')
+def render_dashboard():
+    update_fake_review_counts()  # Update data before rendering the template
 
-# Run the Flask app
+    dates = list(fake_review_counts.keys())
+    counts = list(fake_review_counts.values())
+
+    return render_template('dashboard.html', chart_data={'dates': dates, 'counts': counts})
+
+# ... other notification handling routes from your original code ...
+
 if __name__ == '__main__':
     app.run(debug=True)
