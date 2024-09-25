@@ -16,7 +16,7 @@ def login_failures():
         return jsonify({"message": "Admin notified of login failures."}), 200
     else:
         return jsonify({"error": "Invalid data provided."}), 400
-
+ 
 # API endpoint for defamatory reviews
 @app.route('/api/notifications/defamatoryReview', methods=['POST'])
 def defamatory_review():
