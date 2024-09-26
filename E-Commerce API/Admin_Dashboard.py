@@ -1,37 +1,35 @@
-from flask import Flask, request, jsonify
+import csv
+import os
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-# API endpoint for failed CAPTCHA login attempts
-@app.route('/api/notifications/loginFailures', methods=['POST'])
-def login_failures():
-    data = request.get_json()
-    
-    username = data.get('username')
-    failed_attempts = data.get('failedAttempts')
-    ip_address = data.get('ipAddress')
+# API endpoint for Fake Reviews
 
-    if username and failed_attempts >= 3 and ip_address:
-        # Notify admin logic can go here
-        return jsonify({"message": "Admin notified of login failures."}), 200
-    else:
-        return jsonify({"error": "Invalid data provided."}), 400
+# Path to the fake reviews log file
+FAKE_REVIEW_LOG = 'fake_reviews_log.csv'
 
- 
-# API endpoint for defamatory reviews
-@app.route('/api/notifications/defamatoryReview', methods=['POST'])
-def defamatory_review():
-    data = request.get_json()
+# API endpoint to read the fake_reviews_log.csv and return the data
+@app.route('/api/fake_reviews', methods=['GET'])
+def get_fake_reviews():
+    try:
+        fake_reviews = []
 
-    user_id = data.get('userId')
-    product_id = data.get('productId')
-    review_text = data.get('reviewText')
+        # Check if the file exists
+        if os.path.exists(FAKE_REVIEW_LOG):
+            # Open the CSV file and read the reviews
+            with open(FAKE_REVIEW_LOG, mode='r', newline='') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if len(row) == 2:  # Ensure the row has the expected format
+                        review_text, timestamp = row
+                        fake_reviews.append({'text': review_text, 'timestamp': timestamp})
 
-    if user_id and product_id and "defamatory" in review_text.lower():
-        # Notify admin logic can go here
-        return jsonify({"message": "Admin notified of defamatory review."}), 200
-    else:
-        return jsonify({"error": "Invalid data provided."}), 400
+        # Return the fake reviews as JSON
+        return jsonify({'status': 'success', 'reviews': fake_reviews})
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Run the Flask app
 if __name__ == '__main__':
