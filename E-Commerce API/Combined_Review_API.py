@@ -11,7 +11,7 @@ from threading import Lock
 app = Flask(__name__)
 CORS(app)
 
-FAKE_REVIEW_LOG = 'fake_reviews_log.csv'
+FAKE_REVIEW_LOG = 'E-Commerce API/fake_reviews_log.csv'
 log_lock = Lock()
 
 def get_daily_fake_review_counts():
