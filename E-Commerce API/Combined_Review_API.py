@@ -62,5 +62,23 @@ def combined_review_analysis():
         print(f"Error in /api/combined_review_analysis: {e}")
         return jsonify({'status': 'error', 'message': 'Internal server error.'}), 500
 
+# New API route to return the fake reviews for the admin dashboard
+@app.route('/api/fake_reviews', methods=['GET'])
+def get_fake_reviews():
+    try:
+        fake_reviews = []
+        if os.path.exists(FAKE_REVIEW_LOG):
+            with open(FAKE_REVIEW_LOG, mode='r', newline='') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    review_text, timestamp = row
+                    fake_reviews.append({'text': review_text, 'timestamp': timestamp})
+
+        return jsonify({'status': 'success', 'reviews': fake_reviews})
+
+    except Exception as e:
+        print(f"Error in /api/fake_reviews: {e}")
+        return jsonify({'status': 'error', 'message': 'Internal server error.'}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
