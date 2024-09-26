@@ -1,21 +1,37 @@
+import csv
+from collections import defaultdict
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from URL_Detection import url_detection  # Import the URL Detection module
-from Review_Analysis import classify_review  # Import the Review Analysis module
-import csv
-from datetime import datetime
+from URL_Detection import url_detection
+from Review_Analysis import classify_review
+import os
+from threading import Lock
 
 app = Flask(__name__)
 CORS(app)
 
-FAKE_REVIEW_LOG = 'E-Commerce API/fake_reviews_log.csv'
+FAKE_REVIEW_LOG = 'fake_reviews_log.csv'
+log_lock = Lock()
 
-# Log the fake review to a CSV file
+def get_daily_fake_review_counts():
+    daily_counts = defaultdict(int)
+    if not os.path.exists(FAKE_REVIEW_LOG):
+        return daily_counts  # Return empty if file doesn't exist
+
+    with open(FAKE_REVIEW_LOG, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            review_text, timestamp = row
+            date_str = timestamp.split()[0]  # Extract date from timestamp
+            daily_counts[date_str] += 1
+    return daily_counts
+
 def log_fake_review(review_text):
-    with open(FAKE_REVIEW_LOG, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        # Write the review text and current timestamp
-        writer.writerow([review_text, datetime.now().strftime('%Y-%m-%d %H:%M:%S')])
+    with log_lock:
+        with open(FAKE_REVIEW_LOG, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([review_text, datetime.now().strftime('%Y-%m-%d %H:%M:%S')])
 
 # API route to handle combined review and URL analysis
 @app.route('/api/combined_review_analysis', methods=['POST'])

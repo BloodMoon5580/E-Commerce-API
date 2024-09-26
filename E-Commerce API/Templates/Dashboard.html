@@ -1,40 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Fake Review Bar Graph</title>
+  <!-- Add Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="chart-container">
-        <h2>Daily Fake Reviews</h2>
-        <canvas id="fakeReviewsChart"></canvas>
-    </div>
+  <h1>Fake Review Count Bar Graph</h1>
 
-    <script>
-        const chartData = {{ chart_data | tojson | safe }};  // Access data from Flask
+  <!-- Canvas element where the chart will be rendered -->
+  <canvas id="fakeReviewChart" width="400" height="200"></canvas>
 
-        // Create a Chart.js bar chart
-        const ctx = document.getElementById('fakeReviewsChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: chartData.dates,
-                datasets: [{
-                    label: 'Fake Reviews',
-                    data: chartData.counts,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                // Customize chart options as needed
-                scales: {
-                    y: {
-                        beginAtZero: true  # Ensure Y-axis starts at 0
-                    }
-                }
-            }
-        });
-    </script>
+  <script>
+    // Sample data for the bar graph
+    const dates = ['2024-09-20', '2024-09-21', '2024-09-22', '2024-09-23', '2024-09-24'];
+    const counts = [12, 19, 3, 5, 8];  // Fake review counts for each date
+
+    // Get the canvas context and create a new Chart.js instance
+    const ctx = document.getElementById('fakeReviewChart').getContext('2d');
+
+    const chart = new Chart(ctx, {
+      type: 'bar',  // Bar chart
+      data: {
+        labels: dates,  // The labels for the x-axis (dates)
+        datasets: [{
+          label: 'Number of Fake Reviews',  // Label for the dataset
+          data: counts,  // Data for the y-axis (fake review counts)
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Bar color
+          borderColor: 'rgba(75, 192, 192, 1)',  // Bar border color
+          borderWidth: 1  // Bar border width
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true  // Start y-axis at zero
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
