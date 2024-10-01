@@ -1,149 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Submission</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            color: #444;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-            margin-bottom: 15px;
-            resize: none;
-            transition: border-color 0.3s;
-        }
-        textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #loadingIndicator {
-            display: none;
-            text-align: center;
-            margin-top: 10px;
-            color: #007bff;
-        }
-        #reviewList {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .review {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .review:last-child {
-            border-bottom: none;
-        }
-    </style>
+    <head>
+        <style>
+            h1 {
+                text-align: left;
+                color: #444;
+            }
+            .review_container {
+                margin: 0 auto;
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            textarea {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                font-size: 16px;
+                margin-bottom: 15px;
+                resize: none;
+                transition: border-color 0.3s;
+            }
+            textarea:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+            button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                width: 100%;
+                transition: background-color 0.3s;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+            #loadingIndicator {
+                display: none;
+                text-align: center;
+                margin-top: 10px;
+                color: #007bff;
+            }
+            #reviewList {
+                margin-top: 20px;
+                padding: 10px;
+                background: #f9f9f9;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .review {
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            .review:last-child {
+                border-bottom: none;
+            }
+        </style>
+        <script>
+            async function submitReview() {
+                const reviewText = document.getElementById('reviewText').value;
     
-    <script>
-        async function submitReview() {
-            const reviewText = document.getElementById('reviewText').value;
-        
-            if (reviewText.trim() === '') {
-                alert('Please enter a review');
-                return;
-            }
-        
-            document.getElementById('submitBtn').disabled = true;
-            document.getElementById('loadingIndicator').style.display = 'block';
-        
-            try {
-                const response = await fetch('http://127.0.0.1:5000/api/combined_review_analysis', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ review_text: reviewText })
-                });
-        
-                if (response.ok) {
-                    const result = await response.json();
-        
-                    // Log the entire result to the console
-                    console.log(result);
-        
-                    // Show the message from the result
-                    if (result.message) {
-                        alert(result.message);
-                    } else {
-                        alert('No message in response.');
-                    }
-        
-                    // Display the review if it was accepted
-                    if (result.status === 'accepted') {
-                        displayReview(reviewText);
-                    }
-                } else {
-                    alert('Error submitting review: ' + response.statusText);
+                if (reviewText.trim() === '') {
+                    alert('Please enter a review');
+                    return;
                 }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            } finally {
-                document.getElementById('submitBtn').disabled = false;
-                document.getElementById('loadingIndicator').style.display = 'none';
+    
+                document.getElementById('submitBtn').disabled = true;
+                document.getElementById('loadingIndicator').style.display = 'block';
+    
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/api/review_analysis', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ review_text: reviewText })
+                    });
+    
+                    if (response.ok) {
+                        const result = await response.json();
+                        alert(result.message);
+    
+                        if (result.status === 'accepted') {
+                            displayReview(reviewText);
+                        }
+                    } else {
+                        alert('Error submitting review: ' + response.statusText);
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                } finally {
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                }
             }
-        }        
-        
-
-        function displayReview(reviewText) {
-            const reviewList = document.getElementById('reviewList');
-            const newReview = document.createElement('div');
-            newReview.classList.add('review');
-            newReview.textContent = reviewText;
-            reviewList.appendChild(newReview);
-        }
-    </script>
-</head>
+    
+            function displayReview(reviewText) {
+                const reviewList = document.getElementById('reviewList');
+                const newReview = document.createElement('div');
+                newReview.textContent = reviewText;
+                reviewList.appendChild(newReview);
+            }
+        </script>
+    </head>
 <body>
-    <div class="container">
-        <h1>Submit a Review</h1>
-        <textarea id="reviewText" rows="4" placeholder="Enter your review here..."></textarea>
-        <button id="submitBtn" onclick="submitReview()">Submit Review</button>
-        <div id="loadingIndicator">Loading...</div>
-
-        <div id="reviewList">
-            <h2>Submitted Reviews:</h2>
+        <div class="review_container">
+            <h1>Submit a Review</h1>
+            <textarea id="reviewText" rows="4" placeholder="Enter your review here..."></textarea>
+            <button id="submitBtn" onclick="submitReview()">Submit Review</button>
+            <div id="loadingIndicator">Loading...</div>
+    
+            <div id="reviewList">
+                <h2>Submitted Reviews:</h2>
+            </div>
         </div>
-    </div>
+    </body>
+    </html>
 </body>
 </html>
