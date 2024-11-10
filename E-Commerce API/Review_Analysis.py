@@ -21,10 +21,10 @@ def text_process(text):
 
 # Load the saved SVM model and vectorizer
 try:
-    with open('E-Commerce API/Comment Reviewer/svm_model.pkl', 'rb') as model_file:
+    with open('E-Commerce API/Comment Reviewer/Deep Learning/Models/dnn_model1.pkl', 'rb') as model_file:
         loaded_svm_model = pickle.load(model_file)
 
-    with open('E-Commerce API/Comment Reviewer/svm_vectorizer.pkl', 'rb') as vectorizer_file:
+    with open('E-Commerce API/Comment Reviewer/Deep Learning/Models/dnn_vectorizer1.pkl', 'rb') as vectorizer_file:
         tfidf_vectorizer = pickle.load(vectorizer_file)
 
 except Exception as e:
@@ -32,7 +32,7 @@ except Exception as e:
 
 # Load the saved DNN model
 try:
-    loaded_dnn_model = load_model('E-Commerce API/Comment Reviewer/dnn_model1.h5')
+    loaded_dnn_model = load_model('E-Commerce API/Comment Reviewer/Deep Learning/Models/dnn_model.h5')
 except Exception as e:
     print(f"Error loading DNN model: {e}")
 
